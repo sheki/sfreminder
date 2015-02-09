@@ -1,0 +1,5 @@
+cron:
+- description: weekly reminder
+  url: /prod/handle
+  schedule: every saturday 11:59
+  timezone: America/Los_Angeles
