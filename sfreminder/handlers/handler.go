@@ -47,6 +47,14 @@ func handlerReal(prod bool, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	theOne := pickOne(filterSFCams(cams))
+	//TODO fix this, use a correct field.
+	imgurURL, err := copyToImgur(appengine.NewContext(r), theOne.CurentURL)
+	if err != nil {
+		w.Write([]byte(err.Error()))
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	theOne.CurentURL = imgurURL
 	if prod {
 		sendMail(appengine.NewContext(r), theOne, apikeys.Recipients)
 	} else {
