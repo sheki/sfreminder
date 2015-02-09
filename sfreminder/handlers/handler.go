@@ -10,10 +10,8 @@ import (
 	"math/rand"
 	"net/http"
 	"strings"
-	"time"
 
 	"appengine"
-	"appengine/datastore"
 	"appengine/mail"
 	"appengine/urlfetch"
 )
@@ -81,7 +79,7 @@ type webcams struct {
 }
 
 func reqWebUnderground(ctx appengine.Context) ([]webcams, error) {
-	curl := `http://api.wunderground.com/api/`+apikeys.WebUnderground+`/webcams/q/CA/San_Francisco.json`
+	curl := `http://api.wunderground.com/api/` + apikeys.WebUnderground + `/webcams/q/CA/San_Francisco.json`
 	var b struct {
 		W []webcams `json:"webcams"`
 	}
@@ -143,26 +141,3 @@ const body = `
 </body>
 </html>
 `
-
-type Employee struct {
-	Name     string
-	Role     string
-	HireDate time.Time
-}
-
-func handleStorage(w http.ResponseWriter, r *http.Request) {
-	c := appengine.NewContext(r)
-
-	e1 := Employee{
-		Name:     "Suppa James",
-		Role:     "Manager",
-		HireDate: time.Now(),
-	}
-
-	_, err := datastore.Put(c, datastore.NewIncompleteKey(c, "employee", nil), &e1)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	fmt.Fprintf(w, "Stored and retrieved the Employee named %q", e1.Name)
-}

@@ -1,4 +1,15 @@
-//  handlerStorage used for an non related experiment. 
+package handlers
+
+import (
+	"fmt"
+	"net/http"
+	"time"
+
+	"appengine"
+	"appengine/datastore"
+)
+
+//  handlerStorage used for an non related experiment.
 func handleStorage(w http.ResponseWriter, r *http.Request) {
 	c := appengine.NewContext(r)
 
@@ -14,4 +25,10 @@ func handleStorage(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	fmt.Fprintf(w, "Stored and retrieved the Employee named %q", e1.Name)
+}
+
+type Employee struct {
+	Name     string
+	Role     string
+	HireDate time.Time
 }
