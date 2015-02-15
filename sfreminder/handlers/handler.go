@@ -56,7 +56,7 @@ func handlerReal(prod bool, w http.ResponseWriter, r *http.Request) {
 	}
 	theOne.CurentURL = imgurURL
 	if prod {
-		sendMail(appengine.NewContext(r), theOne, apikeys.Recipients)
+		sendMail(appengine.NewContext(r), theOne, []string{})
 	} else {
 		sendMail(appengine.NewContext(r), theOne, apikeys.TestRecipients)
 	}
@@ -69,11 +69,29 @@ func pickOne(cams []webcams) webcams {
 	return cams[index]
 }
 
+var blockedImages = []string{
+	"I-80",
+	"101",
+	"W1",
+	"N1",
+	"W80",
+	"Foo",
+}
+
 func filterSFCams(cams []webcams) []webcams {
 	var r []webcams
 	for _, c := range cams {
-		if c.City == "San Francisco" || strings.Contains(c.Neighborhood, "I-80") {
-			r = append(r, c)
+		if c.City == "San Francisco" {
+
+			selected := true
+			for _, x := range blockedImages {
+				if strings.Contains(c.Neighborhood, x) {
+					selected = false
+				}
+			}
+			if selected {
+				r = append(r, c)
+			}
 		}
 	}
 	return r
