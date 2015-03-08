@@ -56,7 +56,7 @@ func handlerReal(prod bool, w http.ResponseWriter, r *http.Request) {
 	}
 	theOne.CurentURL = imgurURL
 	if prod {
-		sendMail(appengine.NewContext(r), theOne, []string{})
+		sendMail(appengine.NewContext(r), theOne, apikeys.Recipients)
 	} else {
 		sendMail(appengine.NewContext(r), theOne, apikeys.TestRecipients)
 	}
